@@ -19,9 +19,9 @@ package com.google.android.apps.forscience.whistlepunk;
 import android.content.Context;
 
 /**
- * Subclass of {@link SensorAppearance} which includes the external device name.
+ * Subclass of {@link BuiltInSensorAppearance} which includes the external device name.
  */
-public class ExternalSensorAppearance extends SensorAppearance {
+public class ExternalSensorAppearance extends BuiltInSensorAppearance {
 
     private String mDeviceName;
 

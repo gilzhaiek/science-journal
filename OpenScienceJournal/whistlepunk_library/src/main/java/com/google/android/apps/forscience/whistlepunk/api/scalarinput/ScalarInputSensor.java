@@ -78,6 +78,8 @@ class ScalarInputSensor extends ScalarSensor {
                                     makeListener(listener), settingsKey);
                         } catch (RemoteException e) {
                             complain(e);
+                        } catch (RuntimeException e) {
+                            complain(e);
                         }
                     }
 
@@ -168,7 +170,7 @@ class ScalarInputSensor extends ScalarSensor {
                 }
             }
 
-            private void complain(RemoteException e) {
+            private void complain(Throwable e) {
                 listener.onSourceError(getId(), SensorStatusListener.ERROR_UNKNOWN,
                         e.getMessage());
             }

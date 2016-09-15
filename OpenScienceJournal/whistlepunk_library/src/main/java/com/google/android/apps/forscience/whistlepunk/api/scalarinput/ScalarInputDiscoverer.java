@@ -115,11 +115,12 @@ public class ScalarInputDiscoverer implements ExternalSensorDiscoverer {
         return new ISensorConsumer.Stub() {
             @Override
             public void onSensorFound(String sensorAddress, String name,
-                    PendingIntent settingsIntent) throws RemoteException {
+                    SensorAppearanceResources ids, PendingIntent settingsIntent)
+                    throws RemoteException {
                 if (Log.isLoggable(TAG, Log.DEBUG)) {
                     Log.d(TAG, "Found sensor: " + name);
                 }
-                onEachSensorFound.take(new ScalarInputSpec(name, serviceId, sensorAddress));
+                onEachSensorFound.take(new ScalarInputSpec(name, serviceId, sensorAddress, ids));
             }
         };
     }

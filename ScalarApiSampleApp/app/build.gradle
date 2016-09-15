@@ -21,9 +21,12 @@ android {
 
     sourceSets {
         main {
-            String osj = '../../../science-journal-open/OpenScienceJournal'
+            String osj = '../../OpenScienceJournal'
             aidl {
                 srcDir osj + '/whistlepunk_library/src/api/scalarinput/aidl'
+            }
+            java {
+                srcDir osj + '/whistlepunk_library/src/api/scalarinput/java'
             }
         }
     }

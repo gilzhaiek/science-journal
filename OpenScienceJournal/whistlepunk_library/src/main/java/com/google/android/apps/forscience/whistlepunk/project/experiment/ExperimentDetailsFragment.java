@@ -56,23 +56,17 @@ import com.google.android.apps.forscience.javalib.Success;
 import com.google.android.apps.forscience.whistlepunk.AccessibilityUtils;
 import com.google.android.apps.forscience.whistlepunk.AddNoteDialog;
 import com.google.android.apps.forscience.whistlepunk.AppSingleton;
+import com.google.android.apps.forscience.whistlepunk.Appearances;
 import com.google.android.apps.forscience.whistlepunk.AxisNumberFormat;
+import com.google.android.apps.forscience.whistlepunk.BuiltInSensorAppearance;
 import com.google.android.apps.forscience.whistlepunk.DataController;
 import com.google.android.apps.forscience.whistlepunk.EditNoteDialog;
 import com.google.android.apps.forscience.whistlepunk.ElapsedTimeFormatter;
-import com.google.android.apps.forscience.whistlepunk.metadata.SensorTriggerLabel;
-import com.google.android.apps.forscience.whistlepunk.metadata.TriggerHelper;
-import com.google.android.apps.forscience.whistlepunk.review.DeleteMetadataItemDialog;
-import com.google.android.apps.forscience.whistlepunk.scalarchart.ChartController;
-import com.google.android.apps.forscience.whistlepunk.scalarchart.ChartOptions;
-import com.google.android.apps.forscience.whistlepunk.scalarchart.ChartView;
-import com.google.android.apps.forscience.whistlepunk.scalarchart.GraphOptionsController;
 import com.google.android.apps.forscience.whistlepunk.LoggingConsumer;
 import com.google.android.apps.forscience.whistlepunk.MainActivity;
 import com.google.android.apps.forscience.whistlepunk.PictureUtils;
 import com.google.android.apps.forscience.whistlepunk.R;
 import com.google.android.apps.forscience.whistlepunk.RecordFragment;
-import com.google.android.apps.forscience.whistlepunk.scalarchart.ScalarDisplayOptions;
 import com.google.android.apps.forscience.whistlepunk.SensorAppearance;
 import com.google.android.apps.forscience.whistlepunk.StatsAccumulator;
 import com.google.android.apps.forscience.whistlepunk.TransitionUtils;
@@ -87,10 +81,18 @@ import com.google.android.apps.forscience.whistlepunk.metadata.GoosciLabelValue;
 import com.google.android.apps.forscience.whistlepunk.metadata.Label;
 import com.google.android.apps.forscience.whistlepunk.metadata.PictureLabel;
 import com.google.android.apps.forscience.whistlepunk.metadata.RunStats;
+import com.google.android.apps.forscience.whistlepunk.metadata.SensorTriggerLabel;
 import com.google.android.apps.forscience.whistlepunk.metadata.TextLabel;
+import com.google.android.apps.forscience.whistlepunk.metadata.TriggerHelper;
 import com.google.android.apps.forscience.whistlepunk.project.ProjectDetailsFragment;
+import com.google.android.apps.forscience.whistlepunk.review.DeleteMetadataItemDialog;
 import com.google.android.apps.forscience.whistlepunk.review.RunReviewActivity;
 import com.google.android.apps.forscience.whistlepunk.review.RunReviewFragment;
+import com.google.android.apps.forscience.whistlepunk.scalarchart.ChartController;
+import com.google.android.apps.forscience.whistlepunk.scalarchart.ChartOptions;
+import com.google.android.apps.forscience.whistlepunk.scalarchart.ChartView;
+import com.google.android.apps.forscience.whistlepunk.scalarchart.GraphOptionsController;
+import com.google.android.apps.forscience.whistlepunk.scalarchart.ScalarDisplayOptions;
 
 import java.lang.ref.WeakReference;
 import java.text.NumberFormat;
@@ -1062,11 +1064,12 @@ public class ExperimentDetailsFragment extends Fragment
             final String runId = run.getRunId();
 
             final SensorAppearance appearance = AppSingleton.getInstance(appContext)
-                    .getSensorAppearanceProvider()
-                    .getAppearance(sensorTag);
-            holder.sensorName.setText(appearance.getSensorDisplayName(appContext));
+                    .getSensorAppearanceProvider().getAppearance(sensorTag);
+            holder.sensorName.setText(
+                    Appearances.getSensorDisplayName(appearance, appContext));
             final GoosciSensorLayout.SensorLayout sensorLayout = item.getSelectedSensorLayout();
-            appearance.applyDrawableToImageView(holder.sensorImage, sensorLayout.color);
+            Appearances.applyDrawableToImageView(appearance.getIconDrawable(appContext),
+                    holder.sensorImage, sensorLayout.color);
 
             boolean hasNextButton = item.getSensorTagIndex() < run.getSensorTags().size() - 1;
             boolean hasPrevButton = item.getSensorTagIndex() > 0;

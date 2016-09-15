@@ -1445,6 +1445,8 @@ public class RecordFragment extends Fragment implements AddNoteDialog.AddNoteDia
         final View view = mSensorCardRecyclerView.getChildAt(0).findViewWithTag(
                 sensorId);
         if (view != null) {
+            SensorAppearance appearance = getSensorAppearanceProvider().getAppearance(
+                    sensorId);
             mFeatureDiscoveryProvider.show(
                     FeatureDiscoveryProvider.FEATURE_NEW_EXTERNAL_SENSOR,
                     ((AppCompatActivity) getActivity()).getSupportFragmentManager(),
@@ -1455,8 +1457,7 @@ public class RecordFragment extends Fragment implements AddNoteDialog.AddNoteDia
                             view.performClick();
                         }
                     },
-                    getResources().getDrawable(getSensorAppearanceProvider().getAppearance(
-                            sensorId).getDrawableId()));
+                    appearance.getIconDrawable(getActivity()));
         }
     }
 

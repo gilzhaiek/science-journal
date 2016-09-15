@@ -32,6 +32,7 @@ import com.google.android.apps.forscience.whistlepunk.api.scalarinput.ISensorCon
 import com.google.android.apps.forscience.whistlepunk.api.scalarinput.ISensorDiscoverer;
 import com.google.android.apps.forscience.whistlepunk.api.scalarinput.ISensorObserver;
 import com.google.android.apps.forscience.whistlepunk.api.scalarinput.ISensorStatusListener;
+import com.google.android.apps.forscience.whistlepunk.api.scalarinput.SensorAppearanceResources;
 
 import java.util.List;
 
@@ -78,7 +79,13 @@ public class AllNativeSensorProvider extends Service {
                     return;
                 }
                 for (Sensor sensor : sensors) {
-                    c.onSensorFound("" + sensor.getType(), sensor.getName(), null);
+                    SensorAppearanceResources appearance = new SensorAppearanceResources();
+                    if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                        appearance.iconId = android.R.drawable.ic_media_ff;
+                        appearance.units = "ms/2";
+                        appearance.shortDescription = "Not really a 3-axis accelerometer";
+                    }
+                    c.onSensorFound("" + sensor.getType(), sensor.getName(), appearance, null);
                 }
             }
 
@@ -92,7 +99,6 @@ public class AllNativeSensorProvider extends Service {
                     public void startObserving(final String sensorId,
                             final ISensorObserver observer, final ISensorStatusListener listener,
                             String settingsKey) throws RemoteException {
-
                         mListener = listener;
                         listener.onSensorConnected();
                         unregister();
