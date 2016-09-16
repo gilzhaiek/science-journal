@@ -93,7 +93,8 @@ public class DeviceOptionsViewControllerTest extends AndroidTestCase {
         private final BleSensorSpec mNewSpec;
 
         public TestController(DataController dc, BleSensorSpec newSpec, String experimentId) {
-            super(DeviceOptionsViewControllerTest.this.getContext(), dc, experimentId);
+            super(DeviceOptionsViewControllerTest.this.getContext(), dc, experimentId,
+                    settingsIntent);
             mNewSpec = newSpec;
         }
 

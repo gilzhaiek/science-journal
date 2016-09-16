@@ -17,6 +17,7 @@
 package com.google.android.apps.forscience.whistlepunk.devicemanager;
 
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.PorterDuff;

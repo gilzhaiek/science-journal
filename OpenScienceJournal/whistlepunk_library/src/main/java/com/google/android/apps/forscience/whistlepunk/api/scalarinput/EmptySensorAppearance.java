@@ -3,6 +3,7 @@ package com.google.android.apps.forscience.whistlepunk.api.scalarinput;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 
+import com.google.android.apps.forscience.javalib.Consumer;
 import com.google.android.apps.forscience.whistlepunk.R;
 import com.google.android.apps.forscience.whistlepunk.SensorAnimationBehavior;
 import com.google.android.apps.forscience.whistlepunk.SensorAppearance;
@@ -36,18 +37,8 @@ class EmptySensorAppearance implements SensorAppearance {
     }
 
     @Override
-    public String getFirstLearnMoreParagraph(Context context) {
-        return null;
-    }
-
-    @Override
-    public String getSecondLearnMoreParagraph(Context context) {
-        return null;
-    }
-
-    @Override
-    public Drawable getLearnMoreDrawable(Context context) {
-        return null;
+    public void loadLearnMore(Context context, Consumer<LearnMoreContents> onLoad) {
+        throw new UnsupportedOperationException("I told you I don't have learnMore");
     }
 
     @Override

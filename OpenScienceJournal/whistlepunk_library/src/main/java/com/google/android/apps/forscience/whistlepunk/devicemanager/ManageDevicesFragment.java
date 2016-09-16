@@ -16,6 +16,7 @@
 
 package com.google.android.apps.forscience.whistlepunk.devicemanager;
 
+import android.app.PendingIntent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -36,6 +37,7 @@ import com.google.android.apps.forscience.whistlepunk.PreferenceProgressCategory
 import com.google.android.apps.forscience.whistlepunk.R;
 import com.google.android.apps.forscience.whistlepunk.WhistlePunkApplication;
 import com.google.android.apps.forscience.whistlepunk.metadata.ExternalSensorSpec;
+import com.google.common.base.Joiner;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.util.Map;
@@ -129,7 +131,13 @@ public class ManageDevicesFragment extends PreferenceFragment implements DeviceO
     }
 
     @Override
-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, final Preference preference) {
+        final PendingIntent settingsIntent = mConnectableSensorRegistry.getSettingsIntentFromPreference(
+                preference);
+        oopsLog("ManageDevicesFragment#onPreferenceTreeClick",
+                "preferenceScreen=" + preferenceScreen, "preference=" + preference,
+                "settingsIntent=" + settingsIntent);
+
         if (preference.getKey() != null) {
             if (!mConnectableSensorRegistry.getIsPairedFromPreference(preference)) {
                 mConnectableSensorRegistry.addExternalSensorIfNecessary(mExperimentId, preference,
@@ -139,11 +147,12 @@ public class ManageDevicesFragment extends PreferenceFragment implements DeviceO
                                 if (LOCAL_LOGD) {
                                     Log.d(TAG, "Added sensor to experiment " + mExperimentId);
                                 }
-                                reloadAppearancesAndShowOptions(sensor);
+                                reloadAppearancesAndShowOptions(sensor, settingsIntent);
                             }
                         });
             } else {
-                mConnectableSensorRegistry.showDeviceOptions(this, mExperimentId, preference);
+                mConnectableSensorRegistry.showDeviceOptions(this, mExperimentId, preference,
+                        settingsIntent);
             }
             return true;
         }
@@ -234,21 +243,35 @@ public class ManageDevicesFragment extends PreferenceFragment implements DeviceO
         }
     }
 
-    private void reloadAppearancesAndShowOptions(final ConnectableSensor sensor) {
+    private void reloadAppearancesAndShowOptions(final ConnectableSensor sensor,
+            final PendingIntent settingsIntent) {
+        oopsLog("ManageDevicesFragment#reloadAppearancesAndShowOptions", "sensor=" + sensor,
+                "settingsIntent=" + settingsIntent);
         AppSingleton.getInstance(getActivity()).getSensorAppearanceProvider()
                 .loadAppearances(new LoggingConsumer<Success>(TAG, "Load appearance") {
                     @Override
                     public void success(Success value) {
                         refresh();
-                        showDeviceOptions(mExperimentId, sensor.getConnectedSensorId());
+                        showDeviceOptions(mExperimentId, sensor.getConnectedSensorId(),
+                                settingsIntent);
                     }
                 });
     }
 
+    private static void oopsLog(String methodName, String... params) {
+        // OOPS: delete!
+        String paramString = Joiner.on(", " + "").join(params);
+        Log.e("OOPS", methodName + "(" + paramString + ")");
+    }
+
     @Override
-    public void showDeviceOptions(String experimentId, String sensorId) {
+    public void showDeviceOptions(String experimentId, String sensorId,
+            PendingIntent externalSettingsIntent) {
+        oopsLog("ManageDevicesFragment#showDeviceOptions", "experimentId=" + experimentId,
+                "sensorId=" + sensorId, "externalSettingsIntent=" + externalSettingsIntent);
         // TODO: use a SettingsController subclass once it's fragmentized.
-        DeviceOptionsDialog dialog = DeviceOptionsDialog.newInstance(experimentId, sensorId);
+        DeviceOptionsDialog dialog = DeviceOptionsDialog.newInstance(experimentId, sensorId,
+                externalSettingsIntent);
         dialog.show(getFragmentManager(), "edit_device");
     }
 }

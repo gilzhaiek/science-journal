@@ -23,6 +23,8 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.google.android.apps.forscience.javalib.Consumer;
+
 public class BuiltInSensorAppearance implements SensorAppearance {
     /**
      * Human readable name for this source.
@@ -121,21 +123,26 @@ public class BuiltInSensorAppearance implements SensorAppearance {
     }
 
     @Override
-    public String getFirstLearnMoreParagraph(Context context) {
-        return getString(context, mFirstParagraphStringId);
-    }
+    public void loadLearnMore(final Context context, Consumer<LearnMoreContents> onLoad) {
+        onLoad.take(new LearnMoreContents() {
+            @Override
+            public String getFirstParagraph() {
+                return getString(context, mFirstParagraphStringId);
+            }
 
-    @Override
-    public String getSecondLearnMoreParagraph(Context context) {
-        return getString(context, mSecondParagraphStringId);
-    }
+            @Override
+            public Drawable getDrawable() {
+                if (mLearnMoreDrawableId != 0) {
+                    return context.getResources().getDrawable(mLearnMoreDrawableId);
+                }
+                return null;
+            }
 
-    @Override
-    public Drawable getLearnMoreDrawable(Context context) {
-        if (mLearnMoreDrawableId != 0) {
-            return context.getResources().getDrawable(mLearnMoreDrawableId);
-        }
-        return null;
+            @Override
+            public String getSecondParagraph() {
+                return getString(context, mSecondParagraphStringId);
+            }
+        });
     }
 
     @Override

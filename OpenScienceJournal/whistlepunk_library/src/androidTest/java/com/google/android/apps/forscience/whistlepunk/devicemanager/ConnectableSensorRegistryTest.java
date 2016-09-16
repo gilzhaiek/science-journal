@@ -127,7 +127,7 @@ public class ConnectableSensorRegistryTest extends AndroidTestCase {
         String experimentId = Arbitrary.string();
 
         TestDeviceOptionsPresenter presenter = new TestDeviceOptionsPresenter();
-        registry.showDeviceOptions(presenter, experimentId, pref);
+        registry.showDeviceOptions(presenter, experimentId, pref, settingsIntent);
         assertEquals(experimentId, presenter.experimentId);
         assertEquals(connectedId, presenter.sensorId);
     }
