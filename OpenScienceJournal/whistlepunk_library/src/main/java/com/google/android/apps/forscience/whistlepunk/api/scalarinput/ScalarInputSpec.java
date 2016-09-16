@@ -50,9 +50,13 @@ public class ScalarInputSpec extends ExternalSensorSpec {
             SensorAppearanceResources ids) {
         if (ids != null) {
             config.iconId = ids.iconId;
-            config.units = ids.units;
-            config.shortDescription = ids.shortDescription;
+            config.units = emptyIfNull(ids.units);
+            config.shortDescription = emptyIfNull(ids.shortDescription);
         }
+    }
+
+    private String emptyIfNull(String s) {
+        return s == null ? "" : s;
     }
 
     public ScalarInputSpec(String sensorName, byte[] config) {
