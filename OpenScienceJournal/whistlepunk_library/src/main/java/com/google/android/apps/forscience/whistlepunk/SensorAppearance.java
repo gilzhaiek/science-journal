@@ -3,7 +3,15 @@ package com.google.android.apps.forscience.whistlepunk;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 
+import com.google.android.apps.forscience.javalib.Consumer;
+
 public interface SensorAppearance {
+    public interface LearnMoreContents {
+        String getFirstParagraph();
+        Drawable getDrawable();
+        String getSecondParagraph();
+    }
+
     String getName(Context context);
 
     String getUnits(Context context);
@@ -16,9 +24,5 @@ public interface SensorAppearance {
 
     boolean hasLearnMore();
 
-    String getFirstLearnMoreParagraph(Context context);
-
-    String getSecondLearnMoreParagraph(Context context);
-
-    Drawable getLearnMoreDrawable(Context context);
+    void loadLearnMore(Context context, Consumer<LearnMoreContents> onLoad);
 }
